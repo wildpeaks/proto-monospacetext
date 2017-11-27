@@ -1,0 +1,142 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO MonospaceText [
+	exposedField  MFString  string
+	exposedField  SFFloat   fontSize
+	exposedField  SFInt32   maxChars
+	exposedField  SFInt32   maxLines
+	eventOut      SFVec2f   area
+] "../src/proto.MonospaceText.wrl#MonospaceText"
+
+
+# Like MonospaceText, but also shows its bounding box
+PROTO Example [
+	exposedField  SFVec3f   translation  0 0 0
+	exposedField  SFInt32   maxChars     0
+	exposedField  SFInt32   maxLines     0
+	exposedField  MFString  string       []
+]{
+	Transform {
+		translation	IS translation
+		children [
+			Shape {
+				appearance Appearance {
+				
+				}
+			}
+			DEF text MonospaceText {
+				maxChars IS	maxChars
+				maxLines IS maxLines
+				string IS string
+			}
+			DEF debug Transform {
+				children Shape {
+					appearance Appearance {
+						material Material {
+							diffuseColor 0 0 0
+							emissiveColor 1 0 0
+							transparency 0.5
+						}
+					}
+					geometry IndexedFaceSet	{
+						coordIndex [0 3 2 1 0 -1]
+						coord Coordinate {
+							point [0 0 0, 1 0 0, 1 -1 0, 0 -1 0]
+						}
+					}
+				}
+			}
+		]
+	}
+
+	DEF	script Script {
+		field    SFNode   debug   USE debug
+		eventIn  SFVec2f  onArea
+		directOutput TRUE
+		url	"javascript:
+
+		function onArea(size){
+			debug.scale = new SFVec3f(size.x, size.y, 1);
+		}
+
+		"
+	}
+	ROUTE text.area TO script.onArea
+}
+
+
+Viewpoint {
+	position 6.994 -12.064 30.940
+	orientation 0.000 1.000 0.000 0.001
+	fieldOfView 0.785
+	description	"Default"
+}
+
+NavigationInfo {
+	type "SLIDE"
+}
+
+
+Example {
+	translation	0 0 0
+	string [
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -3 0
+	maxChars 20
+	string [
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -6 0
+	maxChars 26
+	string [
+		"123456789012345678901234567890"
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -10 0
+	maxLines 2
+	string [
+		"123456789012345678901234567890"
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -14 0
+	maxChars 25
+	maxLines 2
+	string [
+		"123456789012345678901234567890"
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -18 0
+	maxChars 26
+	maxLines 2
+	string [
+		"123456789012345678901234567890"
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}
+Example {
+	translation	0 -22 0
+	maxChars 27
+	maxLines 2
+	string [
+		"123456789012345678901234567890"
+		"A veeeeeery long line here"
+		"123456789012345678901234567890"
+	]
+}

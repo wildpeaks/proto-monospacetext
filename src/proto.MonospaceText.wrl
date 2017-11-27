@@ -1,0 +1,79 @@
+#VRML V2.0 utf8
+
+PROTO MonospaceText [
+	exposedField  MFString  string      []
+	exposedField  SFFloat   fontSize    1
+	exposedField  SFInt32   maxChars    -1
+	exposedField  SFInt32   maxLines    -1
+	eventOut      SFVec2f   area
+]{
+	DEF text Text {
+		fontStyle FontStyle {
+			family "Consolas"
+			style "BOLD USE_TEXTURE"
+		}
+	}
+
+	Script {
+		exposedField  MFString  lines     IS string
+		exposedField  SFFloat   fontSize  IS fontSize
+		exposedField  SFInt32   maxChars  IS maxChars
+		exposedField  SFInt32   maxLines  IS maxLines
+		field         SFNode    text      USE text
+		eventOut      SFVec2f   area      IS area
+
+		directOutput TRUE
+		url	"javascript:
+
+
+		function update(){
+			var FONT_SIZE = Math.max(0, fontSize);
+			var LETTER_WIDTH = 0.465 * FONT_SIZE;
+			var LETTER_HEIGHT = FONT_SIZE;
+
+			var hasTooManyLines = false;
+			var linesCount = lines.length;
+			if ((maxLines > 0) && (linesCount > maxLines)){
+				hasTooManyLines = true;
+				linesCount = maxLines;
+			}
+
+			var cleanedLines = new MFString();
+			var longestLineLength = 0;
+			for (var i = 0; i < linesCount; i++){
+				var line = lines[i];
+				if (hasTooManyLines && (i == (linesCount - 1))){
+					line += '…';
+				}
+
+				var lineLength = line.length;
+				var isLineTooLong = (maxChars > 0) && (lineLength > maxChars);
+				if (isLineTooLong){
+					line = line.substring(0, maxChars - 1) + '…';
+					lineLength = maxChars;
+				}
+				longestLineLength = Math.max(longestLineLength, lineLength);
+				cleanedLines[i] = line;
+			}
+			text.string = cleanedLines;
+
+			var width = longestLineLength * LETTER_WIDTH;
+			var height = linesCount * LETTER_HEIGHT;
+			area = new SFVec2f(width, height);
+		}
+
+
+		function lines(){}
+		function fontSize(){}
+		function maxChars(){}
+		function maxLines(){}
+		function eventsProcessed(){
+			update();
+		}
+		function initialize(){
+			update();
+		}
+
+		"
+	}
+}
