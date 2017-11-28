@@ -1,0 +1,184 @@
+#VRML V2.0 utf8
+
+EXTERNPROTO MonospaceText [
+	exposedField  SFNode    appearance
+	exposedField  MFString  string
+	exposedField  SFString  align
+	exposedField  SFString  valign
+	exposedField  SFFloat   fontSize
+	exposedField  SFInt32   maxChars
+	exposedField  SFInt32   maxLines
+	exposedField  SFFloat   maxWidth
+	exposedField  SFFloat   maxHeight
+	eventOut      SFVec2f   bboxCenter
+	eventOut      SFVec2f   bboxSize
+] "../src/proto.MonospaceText.wrl#MonospaceText"
+
+
+# Like MonospaceText, but also shows its bounding box
+PROTO Example [
+	exposedField  SFVec3f   translation  0 0 0
+	exposedField  MFString  string       []
+	exposedField  SFFloat   fontSize     1
+	exposedField  SFFloat   maxWidth     0
+	exposedField  SFFloat   maxHeight    0
+]{
+	Transform {
+		translation	IS translation
+		children [
+			DEF text MonospaceText {
+				string IS string
+				fontSize IS fontSize
+				maxWidth IS maxWidth
+				maxHeight IS maxHeight
+			}
+			DEF transform Transform {
+				children Shape {
+					appearance Appearance {
+						material Material {
+							diffuseColor 0 0 0
+							emissiveColor 0 1 0
+							transparency 0.9
+						}
+					}
+					geometry DEF rectangle Rectangle {}
+				}
+			}
+			DEF outline Transform {
+				children Shape {
+					appearance Appearance {
+						material Material {
+							diffuseColor 0 0 0
+							emissiveColor 1 0 0
+						}
+					}
+					geometry IndexedLineSet {
+						coord Coordinate {
+							point [0 0 0, 1 0 0, 1 -1 0, 0 -1 0]
+						}
+						coordIndex [0 3 2 1 0 -1]
+					}
+				}
+			}
+		]
+	}
+
+	DEF	script Script {
+		exposedField  SFFloat  maxWidth      IS maxWidth
+		exposedField  SFFloat  maxHeight     IS maxHeight
+		field         SFNode   transform     USE transform
+		field         SFNode   outline       USE outline
+		eventIn       SFVec2f  onBboxCenter
+		directOutput TRUE
+		url	"javascript:
+
+		function onBboxCenter(position){
+			transform.translation = new SFVec3f(position.x, position.y, 0);
+		}
+
+		function updateOutline(){
+			outline.scale = new SFVec3f(
+				(maxWidth > 0) ? maxWidth : 0,
+				(maxHeight > 0) ? maxHeight : 0,
+				1
+			);
+		}
+		function maxWidth(){
+			updateOutline();
+		}
+		function maxHeight(){
+			updateOutline();
+		}
+		function initialize(){
+			updateOutline();
+		}
+
+		"
+	}
+
+	ROUTE text.bboxSize TO rectangle.size
+	ROUTE text.bboxCenter TO script.onBboxCenter
+}
+
+
+Viewpoint {
+    position 27.546 -21.471 55.000
+    orientation 0 1 0 0
+    fieldOfView 0.785
+	description	"Default"
+}
+
+NavigationInfo {
+	type "SLIDE"
+}
+
+
+Example {
+	translation	0 0 0
+	string [
+		"font 1, width -1, height -1",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	fontSize 1
+}
+Example {
+	translation	0 -5 0
+	string [
+		"font 1, width 10, height -1",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	maxWidth 10
+	fontSize 1
+}
+Example {
+	translation	0 -10 0
+	string [
+		"font 1, width 10, height 2",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	maxWidth 10
+	maxHeight 2
+	fontSize 1
+}
+
+
+Example {
+	translation	0 -15 0
+	string [
+		"font 2, width -1, height -1",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	fontSize 2
+}
+Example {
+	translation	0 -25 0
+	string [
+		"font 2, width 10, height -1",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	maxWidth 10
+	fontSize 2
+}
+Example {
+	translation	0 -35 0
+	string [
+		"font 2, width 10, height 2",
+		"123456789012345678901234567890"
+		"Lorem ipsum dolor sit amet, an sit diceret omnesque ad mea."
+		"123456789012345678901234567890"
+	]
+	maxWidth 10
+	maxHeight 2
+	fontSize 2
+}
+
