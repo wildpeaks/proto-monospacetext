@@ -81,22 +81,24 @@ PROTO MonospaceText [
 			var height = linesCount * LETTER_HEIGHT;
 			bboxSize = new SFVec2f(width, height);
 
+
 			var offsetX = 0;
 			var offsetY = 0;
-			var centerX = width / 2;
-			var centerY = -height / 2;
 			if (align == 'right'){
-				//
+				offsetX = -width;
 			} else if (align == 'center'){
-				//
+				offsetX = -0.5 * width;
 			}
-			if (align == 'bottom'){
-				//
-			} else if (align == 'center'){
-				//
+			if (valign == 'bottom'){
+				offsetY = height;
+			} else if (valign == 'center'){
+				offsetY = 0.5 * height;
 			}
-			bboxCenter = new SFVec2f(centerX, centerY);
 			transform.translation = new SFVec3f(offsetX, offsetY, 0);
+
+			var centerX = offsetX + (width / 2);
+			var centerY = offsetY - (height / 2);
+			bboxCenter = new SFVec2f(centerX, centerY);
 		}
 
 
