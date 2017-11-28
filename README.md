@@ -30,6 +30,18 @@ Also, the **font size can be modified** at runtime (therefore also animatable), 
 
 -------------------------------------------------------------------------------
 
+## Property `appearance`
+
+**Appearance** (material, texture, shaders) of the text, like `Shape.appearance`.
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFNode`
+ - Default Value: `Appearance{material Material{emissiveColor 1 1 1 diffuseColor 0 0 0}}`
+
+
+-------------------------------------------------------------------------------
+
 ## Property `string`
 
 **Text lines** to display (like `Text.string`).
