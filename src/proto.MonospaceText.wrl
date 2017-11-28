@@ -1,26 +1,43 @@
 #VRML V2.0 utf8
 
 PROTO MonospaceText [
+	exposedField  SFNode    appearance  NULL
 	exposedField  MFString  string      []
+	exposedField  SFString  align       "left"
+	exposedField  SFString  valign      "top"
 	exposedField  SFFloat   fontSize    1
 	exposedField  SFInt32   maxChars    -1
 	exposedField  SFInt32   maxLines    -1
-	eventOut      SFVec2f   area
+	exposedField  SFFloat   maxWidth    -1
+	exposedField  SFFloat   maxHeight   -1
+	eventOut      SFVec2f   bboxCenter
+	eventOut      SFVec2f   bboxSize
 ]{
-	DEF text Text {
-		fontStyle FontStyle {
-			family "Consolas"
-			style "BOLD USE_TEXTURE"
+	DEF transform Transform {
+		children Shape {
+			appearance IS appearance
+			geometry DEF text Text {
+				fontStyle FontStyle {
+					family "Consolas"
+					style "BOLD USE_TEXTURE"
+				}
+			}
 		}
 	}
 
 	Script {
-		exposedField  MFString  lines     IS string
-		exposedField  SFFloat   fontSize  IS fontSize
-		exposedField  SFInt32   maxChars  IS maxChars
-		exposedField  SFInt32   maxLines  IS maxLines
-		field         SFNode    text      USE text
-		eventOut      SFVec2f   area      IS area
+		exposedField  MFString  lines       IS string
+		exposedField  SFString  align       IS align
+		exposedField  SFString  valign      IS valign
+		exposedField  SFFloat   fontSize    IS fontSize
+		exposedField  SFInt32   maxChars    IS maxChars
+		exposedField  SFInt32   maxLines    IS maxLines
+		exposedField  SFFloat   maxWidth    IS maxWidth
+		exposedField  SFFloat   maxHeight   IS maxHeight
+		field         SFNode    transform   USE transform
+		field         SFNode    text        USE text
+		eventOut      SFVec2f   bboxCenter  IS bboxCenter
+		eventOut      SFVec2f   bboxSize    IS bboxSize
 
 		directOutput TRUE
 		url	"javascript:
@@ -28,7 +45,7 @@ PROTO MonospaceText [
 
 		function update(){
 			var FONT_SIZE = Math.max(0, fontSize);
-			var LETTER_WIDTH = 0.465 * FONT_SIZE;
+			var LETTER_WIDTH = 0.465 * FONT_SIZE; // @warning Specific to Consolas font
 			var LETTER_HEIGHT = FONT_SIZE;
 
 			var hasTooManyLines = false;
@@ -37,6 +54,9 @@ PROTO MonospaceText [
 				hasTooManyLines = true;
 				linesCount = maxLines;
 			}
+
+			// maxWidth
+			// maxHeight
 
 			var cleanedLines = new MFString();
 			var longestLineLength = 0;
@@ -59,14 +79,35 @@ PROTO MonospaceText [
 
 			var width = longestLineLength * LETTER_WIDTH;
 			var height = linesCount * LETTER_HEIGHT;
-			area = new SFVec2f(width, height);
+			bboxSize = new SFVec2f(width, height);
+
+			var offsetX = 0;
+			var offsetY = 0;
+			var centerX = width / 2;
+			var centerY = -height / 2;
+			if (align == 'right'){
+				//
+			} else if (align == 'center'){
+				//
+			}
+			if (align == 'bottom'){
+				//
+			} else if (align == 'center'){
+				//
+			}
+			bboxCenter = new SFVec2f(centerX, centerY);
+			transform.translation = new SFVec3f(offsetX, offsetY, 0);
 		}
 
 
 		function lines(){}
+		function align(){}
+		function valign(){}
 		function fontSize(){}
 		function maxChars(){}
 		function maxLines(){}
+		function maxWidth(){}
+		function maxHeight(){}
 		function eventsProcessed(){
 			update();
 		}

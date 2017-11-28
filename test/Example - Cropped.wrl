@@ -1,48 +1,47 @@
 #VRML V2.0 utf8
 
 EXTERNPROTO MonospaceText [
+	exposedField  SFNode    appearance
 	exposedField  MFString  string
+	exposedField  SFString  align
+	exposedField  SFString  valign
 	exposedField  SFFloat   fontSize
 	exposedField  SFInt32   maxChars
 	exposedField  SFInt32   maxLines
-	eventOut      SFVec2f   area
+	exposedField  SFFloat   maxWidth
+	exposedField  SFFloat   maxHeight
+	eventOut      SFVec2f   bboxCenter
+	eventOut      SFVec2f   bboxSize
 ] "../src/proto.MonospaceText.wrl#MonospaceText"
 
 
 # Like MonospaceText, but also shows its bounding box
 PROTO Example [
 	exposedField  SFVec3f   translation  0 0 0
+	exposedField  SFColor   color        1 0 0
+	exposedField  MFString  string       []
 	exposedField  SFInt32   maxChars     0
 	exposedField  SFInt32   maxLines     0
-	exposedField  MFString  string       []
 ]{
 	Transform {
 		translation	IS translation
 		children [
-			Shape {
-				appearance Appearance {
-				
-				}
-			}
 			DEF text MonospaceText {
 				maxChars IS	maxChars
 				maxLines IS maxLines
 				string IS string
 			}
-			DEF debug Transform {
+			DEF transform Transform {
 				children Shape {
 					appearance Appearance {
 						material Material {
 							diffuseColor 0 0 0
-							emissiveColor 1 0 0
+							emissiveColor IS color
 							transparency 0.5
 						}
 					}
-					geometry IndexedFaceSet	{
-						coordIndex [0 3 2 1 0 -1]
-						coord Coordinate {
-							point [0 0 0, 1 0 0, 1 -1 0, 0 -1 0]
-						}
+					geometry DEF rectangle Rectangle {
+						size 0 0
 					}
 				}
 			}
@@ -50,18 +49,20 @@ PROTO Example [
 	}
 
 	DEF	script Script {
-		field    SFNode   debug   USE debug
-		eventIn  SFVec2f  onArea
+		field    SFNode   transform     USE transform
+		eventIn  SFVec2f  onBboxCenter
 		directOutput TRUE
 		url	"javascript:
 
-		function onArea(size){
-			debug.scale = new SFVec3f(size.x, size.y, 1);
+		function onBboxCenter(position){
+			transform.translation = new SFVec3f(position.x, position.y, 0);
 		}
 
 		"
 	}
-	ROUTE text.area TO script.onArea
+
+	ROUTE text.bboxSize TO rectangle.size
+	ROUTE text.bboxCenter TO script.onBboxCenter
 }
 
 
@@ -78,6 +79,7 @@ NavigationInfo {
 
 
 Example {
+	color 1 0 0
 	translation	0 0 0
 	string [
 		"A veeeeeery long line here"
@@ -85,6 +87,7 @@ Example {
 	]
 }
 Example {
+	color 0 1 0
 	translation	0 -3 0
 	maxChars 20
 	string [
@@ -93,6 +96,7 @@ Example {
 	]
 }
 Example {
+	color 0 0 1
 	translation	0 -6 0
 	maxChars 26
 	string [
@@ -102,6 +106,7 @@ Example {
 	]
 }
 Example {
+	color 1 1 0
 	translation	0 -10 0
 	maxLines 2
 	string [
@@ -111,6 +116,7 @@ Example {
 	]
 }
 Example {
+	color 0 1 1
 	translation	0 -14 0
 	maxChars 25
 	maxLines 2
@@ -121,6 +127,7 @@ Example {
 	]
 }
 Example {
+	color 1 0 1
 	translation	0 -18 0
 	maxChars 26
 	maxLines 2
@@ -131,6 +138,7 @@ Example {
 	]
 }
 Example {
+	color .5 .5 .5
 	translation	0 -22 0
 	maxChars 27
 	maxLines 2

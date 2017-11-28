@@ -1,6 +1,6 @@
 # MonospaceText
 
-VRML PROTO (based on `Text`) that **displays a monospace text** using monospace font `Consolas`.
+VRML PROTO (based on `Transform`) that **displays a monospace text** using monospace font `Consolas`.
 
 It can optionally **automatically crop the text to fit** a maximum number of characters per line,
 and number of lines (using an ellipsis to indicate when content has been cropped).
@@ -9,12 +9,20 @@ It also **provides the bounding box of the resulting text**, so you can do thing
 a border around the text, a background, or using the text like a tooltip that should
 be placed one side or the other depending on the space available.
 
+It can also **align text horizontally & vertically**.
+
 	EXTERNPROTO MonospaceText [
+		exposedField  SFNode    appearance
 		exposedField  MFString  string
+		exposedField  SFString  align
+		exposedField  SFString  valign
 		exposedField  SFFloat   fontSize
 		exposedField  SFInt32   maxChars
 		exposedField  SFInt32   maxLines
-		eventOut      SFVec2f   area
+		exposedField  SFFloat   maxWidth
+		exposedField  SFFloat   maxHeight
+		eventOut      SFVec2f   bboxCenter
+		eventOut      SFVec2f   bboxSize
 	] "proto.MonospaceText.wrl#MonospaceText"
 
 
@@ -28,6 +36,30 @@ Definition:
  - Field Type: `exposedField`
  - Data Type: `MFString`
  - Default Value: `[]`
+
+
+-------------------------------------------------------------------------------
+
+## Property `align`
+
+**Horizontal alignment** (`left`, `center`, or `right`).
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFString`
+ - Default Value: `"left"`
+
+
+-------------------------------------------------------------------------------
+
+## Property `valign`
+
+**Vertical alignment** (`top`, `center`, or `bottom`).
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFString`
+ - Default Value: `"top"`
 
 
 -------------------------------------------------------------------------------
@@ -70,7 +102,44 @@ Definition:
 
 -------------------------------------------------------------------------------
 
-## Event `area`
+## Property `maxWidth`
+
+**Maximum width** in VRML units (`-1` means "no limit").
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFFloat`
+ - Default Value: `-1`
+
+
+-------------------------------------------------------------------------------
+
+## Property `maxHeight`
+
+**Maximum height** in VRML units (`-1` means "no limit").
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFFloat`
+ - Default Value: `-1`
+
+
+-------------------------------------------------------------------------------
+
+## Event `bboxCenter`
+
+2D position in VRML units of the **center of the bounding box** of displayed text.
+
+Note: this is *not the same as the anchor* (local position `[0, 0]`) which also depends on the alignment.
+
+Definition:
+ - Field Type: `eventOut`
+ - Data Type: `SFVec2f`
+
+
+-------------------------------------------------------------------------------
+
+## Event `bboxSize`
 
 **Size (width, height)** in VRML units of the displayed text.
 
@@ -78,10 +147,16 @@ Definition:
  - Field Type: `eventOut`
  - Data Type: `SFVec2f`
 
-The origin of the shape is the *top-left corner*, therefore the bounding box is:
+For example, with alignment top-left, the bounding box is:
  - top: `0`
  - left: `0`
  - right: `size.x`
+ - bottom: `-size.y`
+
+With aligment top-right instead, the bounding box is:
+ - top: `0`
+ - left: `-size.x`
+ - right: `0`
  - bottom: `-size.y`
 
 
