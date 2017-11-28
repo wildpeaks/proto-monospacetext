@@ -44,19 +44,27 @@ PROTO MonospaceText [
 
 
 		function update(){
-			var FONT_SIZE = Math.max(0, fontSize);
-			var LETTER_WIDTH = 0.465 * FONT_SIZE; // @warning Specific to Consolas font
-			var LETTER_HEIGHT = FONT_SIZE;
+			var cleanedFontSize = Math.max(0, fontSize);
+			transform.scale = new SFVec3f(cleanedFontSize, cleanedFontSize, 1);
 
-//			var cleanedMaxChars = AAAAAAAAAAAAAA;  // either maxChars, either deduced from maxWidth, FONT_SIZE and LETTER_WIDTH
-//			var cleanedMaxLines = AAAAAAAAAAAAAA;  // either maxLines, either deduced from maxHeight, FONT_SIZE and LETTER_HEIGHT
+			var letterWidth = 0.465 * cleanedFontSize; // @warning Specific to Consolas font
+			var cleanedMaxChars = maxChars;
+			if (maxWidth > 0){
+				cleanedMaxChars = Math.floor(maxWidth / letterWidth);
+			}
+
+			var letterHeight = cleanedFontSize;
+			var cleanedMaxLines = maxLines;
+			if (maxHeight > 0){
+				cleanedMaxLines = Math.floor(maxHeight / letterHeight);
+			}
 
 
 			var hasTooManyLines = false;
 			var linesCount = lines.length;
-			if ((maxLines > 0) && (linesCount > maxLines)){
+			if ((cleanedMaxLines > 0) && (linesCount > cleanedMaxLines)){
 				hasTooManyLines = true;
-				linesCount = maxLines;
+				linesCount = cleanedMaxLines;
 			}
 
 			var cleanedLines = new MFString();
@@ -68,18 +76,18 @@ PROTO MonospaceText [
 				}
 
 				var lineLength = line.length;
-				var isLineTooLong = (maxChars > 0) && (lineLength > maxChars);
+				var isLineTooLong = (cleanedMaxChars > 0) && (lineLength > cleanedMaxChars);
 				if (isLineTooLong){
-					line = line.substring(0, maxChars - 1) + '…';
-					lineLength = maxChars;
+					line = line.substring(0, cleanedMaxChars - 1) + '…';
+					lineLength = cleanedMaxChars;
 				}
 				longestLineLength = Math.max(longestLineLength, lineLength);
 				cleanedLines[i] = line;
 			}
 			text.string = cleanedLines;
 
-			var width = longestLineLength * LETTER_WIDTH;
-			var height = linesCount * LETTER_HEIGHT;
+			var width = longestLineLength * letterWidth;
+			var height = linesCount * letterHeight;
 			bboxSize = new SFVec2f(width, height);
 
 			var offsetX = 0;
@@ -99,8 +107,6 @@ PROTO MonospaceText [
 			var centerX = offsetX + (width / 2);
 			var centerY = offsetY - (height / 2);
 			bboxCenter = new SFVec2f(centerX, centerY);
-
-			transform.scale = new SFVec3f(fontSize, fontSize, 1);
 		}
 
 
