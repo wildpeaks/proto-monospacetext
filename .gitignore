@@ -16,6 +16,7 @@
 !/.editorconfig
 !/.gitattributes
 !/.gitignore
+!/package.json
 !/src
 !/test
 

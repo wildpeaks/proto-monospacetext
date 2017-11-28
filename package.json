@@ -1,0 +1,20 @@
+{
+  "name": "@wildpeaks/proto-monospacetext",
+  "version": "1.0.0",
+  "description": "PROTO MonospaceText",
+  "main": "src/proto.MonospaceText.wrl",
+  "files": [
+    "src/proto.MonospaceText.wrl"
+  ],
+  "repository": "https://github.com/wildpeaks/proto-monospacetext",
+  "keywords": [
+    "wildpeaks",
+    "vrml"
+  ],
+  "author": "Cecile Muller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wildpeaks/proto-monospacetext/issues"
+  },
+  "homepage": "https://github.com/wildpeaks/proto-monospacetext#readme"
+}
