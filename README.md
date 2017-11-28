@@ -11,7 +11,7 @@ be placed one side or the other depending on the space available.
 
 It can also **align text horizontally & vertically**.
 
-Also, the **font size can be modified** at runtime (therefore also animatable), unlike `FontStyle.size`.
+Also, the font **size, bold, and italic can be modified** at runtime (therefore also animatable), unlike `FontStyle.size` and `FontStyle.style`.
 
 	EXTERNPROTO MonospaceText [
 		exposedField  SFNode    appearance
@@ -19,6 +19,8 @@ Also, the **font size can be modified** at runtime (therefore also animatable), 
 		exposedField  SFString  align
 		exposedField  SFString  valign
 		exposedField  SFFloat   fontSize
+		exposedField  SFBool    bold
+		exposedField  SFBool    italic
 		exposedField  SFInt32   maxChars
 		exposedField  SFInt32   maxLines
 		exposedField  SFFloat   maxWidth
@@ -86,6 +88,30 @@ Definition:
  - Field Type: `exposedField`
  - Data Type: `SFFloat`
  - Default Value: `1`
+
+
+-------------------------------------------------------------------------------
+
+## Property `bold`
+
+Specifies if the font should be **bold** (`TRUE`) or not (`FALSE`), like `"BOLD"` in `FontStyle.style`.
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFBool`
+ - Default Value: `FALSE`
+
+
+-------------------------------------------------------------------------------
+
+## Property `italic`
+
+Specifies if the font should be ***italic*** (`TRUE`) or not (`FALSE`), like `"ITALIC"` in `FontStyle.style`.
+
+Definition:
+ - Field Type: `exposedField`
+ - Data Type: `SFBool`
+ - Default Value: `FALSE`
 
 
 -------------------------------------------------------------------------------

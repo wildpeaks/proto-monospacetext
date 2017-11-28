@@ -6,6 +6,8 @@ PROTO MonospaceText [
 	exposedField  SFString  align       "left"
 	exposedField  SFString  valign      "top"
 	exposedField  SFFloat   fontSize    1
+	exposedField  SFBool    bold        FALSE
+	exposedField  SFBool    italic      FALSE
 	exposedField  SFInt32   maxChars    -1
 	exposedField  SFInt32   maxLines    -1
 	exposedField  SFFloat   maxWidth    -1
@@ -16,34 +18,47 @@ PROTO MonospaceText [
 	DEF transform Transform {
 		children Shape {
 			appearance IS appearance
-			geometry DEF text Text {
-				fontStyle FontStyle {
-					family "Consolas"
-					style "BOLD USE_TEXTURE"
-				}
-			}
+			geometry DEF text Text {}
 		}
 	}
 
 	Script {
-		exposedField  MFString  lines       IS string
-		exposedField  SFString  align       IS align
-		exposedField  SFString  valign      IS valign
-		exposedField  SFFloat   fontSize    IS fontSize
-		exposedField  SFInt32   maxChars    IS maxChars
-		exposedField  SFInt32   maxLines    IS maxLines
-		exposedField  SFFloat   maxWidth    IS maxWidth
-		exposedField  SFFloat   maxHeight   IS maxHeight
-		field         SFNode    transform   USE transform
-		field         SFNode    text        USE text
-		eventOut      SFVec2f   bboxCenter  IS bboxCenter
-		eventOut      SFVec2f   bboxSize    IS bboxSize
+		exposedField  MFString  lines           IS string
+		exposedField  SFString  align           IS align
+		exposedField  SFString  valign          IS valign
+		exposedField  SFFloat   fontSize        IS fontSize
+		exposedField  SFBool    bold            IS bold
+		exposedField  SFBool    italic          IS italic
+		exposedField  SFInt32   maxChars        IS maxChars
+		exposedField  SFInt32   maxLines        IS maxLines
+		exposedField  SFFloat   maxWidth        IS maxWidth
+		exposedField  SFFloat   maxHeight       IS maxHeight
+		field         SFNode    transform       USE transform
+		field         SFNode    text            USE text
+
+		eventOut      SFVec2f   bboxCenter      IS bboxCenter
+		eventOut      SFVec2f   bboxSize        IS bboxSize
+
+		field         SFBool    shouldRecreate  FALSE
 
 		directOutput TRUE
-		url	"javascript:
+		url "javascript:
 
 
 		function update(){
+			if (shouldRecreate){
+				shouldRecreate = false;
+				var style = 'PLAIN';
+				if (bold && italic){
+					style = 'BOLD ITALIC';
+				} else if (bold){
+					style = 'BOLD';
+				} else if (italic){
+					style = 'ITALIC';
+				}
+				text.fontStyle = Browser.createVrmlFromString('FontStyle{family \"Consolas\" style \"' + style + ' USE_TEXTURE\"}')[0];
+			}
+
 			var cleanedFontSize = Math.max(0, fontSize);
 			transform.scale = new SFVec3f(cleanedFontSize, cleanedFontSize, 1);
 
@@ -118,10 +133,18 @@ PROTO MonospaceText [
 		function maxLines(){}
 		function maxWidth(){}
 		function maxHeight(){}
+		function bold(){
+			shouldRecreate = true;
+		}
+		function italic(){
+			shouldRecreate = true;
+		}
 		function eventsProcessed(){
 			update();
+			shouldRecreate = false;
 		}
 		function initialize(){
+			shouldRecreate = true;
 			update();
 		}
 

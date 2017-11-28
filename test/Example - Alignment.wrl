@@ -6,6 +6,8 @@ EXTERNPROTO MonospaceText [
 	exposedField  SFString  align
 	exposedField  SFString  valign
 	exposedField  SFFloat   fontSize
+	exposedField  SFBool    bold
+	exposedField  SFBool    italic
 	exposedField  SFInt32   maxChars
 	exposedField  SFInt32   maxLines
 	exposedField  SFFloat   maxWidth
@@ -24,7 +26,7 @@ PROTO Example [
 	exposedField  SFString  valign       ""
 ]{
 	Transform {
-		translation	IS translation
+		translation IS translation
 		children [
 			Shape {
 				appearance Appearance {
@@ -33,7 +35,7 @@ PROTO Example [
 						emissiveColor 1 1 0
 					}
 				}
-				geometry Sphere	{
+				geometry Sphere {
 					radius 0.1
 				}
 			}
@@ -59,11 +61,11 @@ PROTO Example [
 		]
 	}
 
-	DEF	script Script {
+	DEF script Script {
 		field    SFNode   transform     USE transform
 		eventIn  SFVec2f  onBboxCenter
 		directOutput TRUE
-		url	"javascript:
+		url "javascript:
 
 		function onBboxCenter(position){
 			transform.translation = new SFVec3f(position.x, position.y, 0);
@@ -82,10 +84,10 @@ NavigationInfo {
 }
 
 Viewpoint {
-    position 0 -8 23
-    orientation 0 1 0 0
-    fieldOfView 0.785
-	description	"Default"
+	position 0 -8 23
+	orientation 0 1 0 0
+	fieldOfView 0.785
+	description "Default"
 }
 
 
@@ -112,21 +114,21 @@ Example {
 }
 
 Example {
-	translation	0 -6 0
+	translation 0 -6 0
 	color 1 0 0
 	align "left"
 	valign "center"
 	string "Left Center"
 }
 Example {
-	translation	0 -8 0
+	translation 0 -8 0
 	color 0 1 0
 	align "center"
 	valign "center"
 	string "Center Center"
 }
 Example {
-	translation	0 -10 0
+	translation 0 -10 0
 	color 0 0 1
 	align "right"
 	valign "center"
@@ -134,21 +136,21 @@ Example {
 }
 
 Example {
-	translation	0 -12 0
+	translation 0 -12 0
 	color 1 0 0
 	align "left"
 	valign "bottom"
 	string "Left Bottom"
 }
 Example {
-	translation	0 -14 0
+	translation 0 -14 0
 	color 0 1 0
 	align "center"
 	valign "bottom"
 	string "Center Bottom"
 }
 Example {
-	translation	0 -16 0
+	translation 0 -16 0
 	color 0 0 1
 	align "right"
 	valign "bottom"
