@@ -48,15 +48,16 @@ PROTO MonospaceText [
 			var LETTER_WIDTH = 0.465 * FONT_SIZE; // @warning Specific to Consolas font
 			var LETTER_HEIGHT = FONT_SIZE;
 
+//			var cleanedMaxChars = AAAAAAAAAAAAAA;  // either maxChars, either deduced from maxWidth, FONT_SIZE and LETTER_WIDTH
+//			var cleanedMaxLines = AAAAAAAAAAAAAA;  // either maxLines, either deduced from maxHeight, FONT_SIZE and LETTER_HEIGHT
+
+
 			var hasTooManyLines = false;
 			var linesCount = lines.length;
 			if ((maxLines > 0) && (linesCount > maxLines)){
 				hasTooManyLines = true;
 				linesCount = maxLines;
 			}
-
-			// maxWidth
-			// maxHeight
 
 			var cleanedLines = new MFString();
 			var longestLineLength = 0;
@@ -81,7 +82,6 @@ PROTO MonospaceText [
 			var height = linesCount * LETTER_HEIGHT;
 			bboxSize = new SFVec2f(width, height);
 
-
 			var offsetX = 0;
 			var offsetY = 0;
 			if (align == 'right'){
@@ -99,6 +99,8 @@ PROTO MonospaceText [
 			var centerX = offsetX + (width / 2);
 			var centerY = offsetY - (height / 2);
 			bboxCenter = new SFVec2f(centerX, centerY);
+
+			transform.scale = new SFVec3f(fontSize, fontSize, 1);
 		}
 
 

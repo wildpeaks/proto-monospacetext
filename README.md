@@ -2,14 +2,16 @@
 
 VRML PROTO (based on `Transform`) that **displays a monospace text** using monospace font `Consolas`.
 
-It can optionally **automatically crop the text to fit** a maximum number of characters per line,
-and number of lines (using an ellipsis to indicate when content has been cropped).
+It can optionally **automatically crop the text to fit** constraints (characters per line,
+number of lines, width, height), using an ellipsis to indicate when content has been cropped.
 
 It also **provides the bounding box of the resulting text**, so you can do things like adding
 a border around the text, a background, or using the text like a tooltip that should
 be placed one side or the other depending on the space available.
 
 It can also **align text horizontally & vertically**.
+
+Also, the **font size can be modified** at runtime (therefore also animatable), unlike `FontStyle.size`.
 
 	EXTERNPROTO MonospaceText [
 		exposedField  SFNode    appearance
