@@ -16,6 +16,7 @@
 !/.editorconfig
 !/.gitattributes
 !/.gitignore
+!/.vscode
 !/package.json
 !/src
 !/test
