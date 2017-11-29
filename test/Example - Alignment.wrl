@@ -17,7 +17,6 @@ EXTERNPROTO MonospaceText [
 ] "../src/proto.MonospaceText.wrl#MonospaceText"
 
 
-# Like MonospaceText, but also shows its bounding box
 PROTO Example [
 	exposedField  SFVec3f   translation  0 0 0
 	exposedField  SFColor   color        1 0 0
@@ -78,6 +77,10 @@ PROTO Example [
 	ROUTE text.bboxCenter TO script.onBboxCenter
 }
 
+
+WorldInfo {
+	title "Tests the 'align' & 'valign' properties of MonospaceText"
+}
 
 NavigationInfo {
 	type "SLIDE"

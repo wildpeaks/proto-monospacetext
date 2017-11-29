@@ -17,7 +17,6 @@ EXTERNPROTO MonospaceText [
 ] "../src/proto.MonospaceText.wrl#MonospaceText"
 
 
-# Like MonospaceText, but also shows its bounding box
 PROTO Example [
 	exposedField  SFVec3f   translation  0 0 0
 	exposedField  MFString  string       []
@@ -32,6 +31,10 @@ PROTO Example [
 	}
 }
 
+
+WorldInfo {
+	title "Tests the 'appearance' property of MonospaceText"
+}
 
 Viewpoint {
 	position 4.5 -0.5 10

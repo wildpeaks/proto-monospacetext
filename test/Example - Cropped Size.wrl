@@ -17,7 +17,6 @@ EXTERNPROTO MonospaceText [
 ] "../src/proto.MonospaceText.wrl#MonospaceText"
 
 
-# Like MonospaceText, but also shows its bounding box
 PROTO Example [
 	exposedField  SFVec3f   translation  0 0 0
 	exposedField  MFString  string       []
@@ -102,6 +101,10 @@ PROTO Example [
 	ROUTE text.bboxCenter TO script.onBboxCenter
 }
 
+
+WorldInfo {
+	title "Tests the 'maxWidth' & 'maxHeight' properties of MonospaceText"
+}
 
 Viewpoint {
 	position 27.546 -21.471 55.000
